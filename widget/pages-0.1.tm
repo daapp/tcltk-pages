@@ -53,6 +53,7 @@ snit::widget widget::pages {
     }
 }
 
+
 snit::widget widget::pagesmanager {
     hulltype ttk::frame
 
@@ -107,4 +108,39 @@ snit::widget widget::pagesmanager {
     }
 
     delegate method raise to pagesw
+}
+
+
+if {[info exists argv0] && [file tail [info script]] eq [file tail $argv0]} {
+
+    labelframe .demopages -text "Pages demo"
+
+    set pages [widget::pages .demopages.pages]
+    set switch [frame .demopages.switch -bd 1]
+
+    set colours {red yellow green}
+
+    foreach i {1 2 3} {
+        button $switch.sw$i -text page$i -command [list $pages raise page$i]
+        pack $switch.sw$i -side left
+
+        set f [$pages add page$i]
+
+        lassign $colours c1 c2 c3
+
+        button $f.$c1 -bg $c1 -text $c1
+        button $f.$c2 -bg $c2 -text $c2
+        button $f.$c3 -bg $c3 -text $c3
+
+        pack $f.$c1 $f.$c2 $f.$c3 -side top -padx 5 -pady 5
+
+        set colours [list $c2 $c3 $c1]
+    }
+
+    pack .demopages -fill both -expand true
+
+    pack $switch -side top -fill y
+    pack $pages -fill both -expand true
+
+    $pages raise page1
 }
